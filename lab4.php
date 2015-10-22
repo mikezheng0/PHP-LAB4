@@ -56,7 +56,7 @@ padding:10px;}
 <header>
 <h1>Form Validation with Reg Expressions and CSV</h1>
 <a href="" class = "topbuttons">Refresh This Page</a>
-<a href="" class = "topbuttons">Show Logfile.txt</a>
+<a href="./logfile.txt" class = "topbuttons">Show Logfile.txt</a>
 <a href="" class = "topbuttons">Show logfile.txt Formatted</a>
 <a href="" class = "topbuttons">Clear logfile.txt</a>
 </header>
@@ -119,12 +119,12 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 	}
 	else 
 	{
-		date_default_timezone_set('UTC');
+		date_default_timezone_set('EST');
 		echo "<section class=\"acceptedMessage\">";
 		echo "Thank you <strong>".$_POST['fullname']."</strong> for your submission. You submitted:<br>".$_POST['fullname'].", ".$_POST['street'].", ".$_POST['postalcode'].", ".$_POST['phone'].", ".$_POST['email'];
 		$fp = fopen('logfile.txt', 'w') or die('No file!!!'); 
-		fputcsv($fp, array($_SERVER['REMOTE_ADDR'],date("Ymd h:i:sa"),$_POST['fullname'],$_POST['street'],$_POST['postalcode'],$_POST['phone'],$_POST['email']));
-		fclose($fp);
+		fputcsv($fp, array($_SERVER['REMOTE_ADDR'],date("Ymd H:i:s"),$_POST['fullname'],$_POST['street'],$_POST['postalcode'],$_POST['phone'],$_POST['email']));
+		//fclose($fp);
 	}
 }
 ?>
