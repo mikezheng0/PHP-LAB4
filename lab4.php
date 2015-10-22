@@ -69,7 +69,7 @@ function processInput(&$invalue)
 if($_SERVER['REQUEST_METHOD']=='POST')
 {
 	
-	if (preg_match("/^(Mrs|Mr)\.\s+\w+\s+\w+/", $_POST['fullname'])) {
+	if (preg_match("/^(Mrs|Mr)\.\s+\w+\s+\w+$/i", $_POST['fullname'])) {
 	} 
 	else {
 		$errorList['fullname'] = "Fullname not entered correctly";
@@ -77,7 +77,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 	}
 	
 	
-	if(preg_match("/^[0-9]{2,3}\s+\w+\s+(Street|Road)/", $_POST['street'])){
+	if(preg_match("/^[0-9]{2,3}\s+\w+\s+(Street|Road)$/", $_POST['street'])){
 	}
 	else{
 		$errorList['street'] = "Street address not entered correctly";
@@ -87,18 +87,18 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 	if(preg_match("/^[d-km-x][d-km-x][1-9][ -]*[d-km-x][1-9][1-9]$/i", $_POST['postalcode'])){
 	}
 	else{
-		$errorList['postalcode'] = "Invalid Phone Number";
+		$errorList['postalcode'] = "Postal Code in wrong format";
 		$postalcodeError="error";
 	}
 	
-	if(preg_match("/^\(*[0-9][0-9][0-9]\)*[. -]*[0-9][0-9][0-9][. -]*[0-9][0-9][0-9][0-9]/", $_POST['phone'])){
+	if(preg_match("/^\(*[0-9][0-9][0-9]\)*[. -]*[0-9][0-9][0-9][. -]*[0-9][0-9][0-9][0-9]$/", $_POST['phone'])){
 	}
 	else{
-		$errorList['phone'] = "Postal Code in wrong format";
+		$errorList['phone'] = "Invalid Phone Number";
 		$phoneError="error";
 	}
 	
-	if(preg_match("/^\w{4,10}\.\w{4,10}\@mohawkcollege.(com|ca|org)/", $_POST['email'])){
+	if(preg_match("/^\w{4,10}\.\w{4,10}\@mohawkcollege.(com|ca|org)$/i", $_POST['email'])){
 	}
 	else{
 		$errorList['email'] = "Email is in wrong format!";
