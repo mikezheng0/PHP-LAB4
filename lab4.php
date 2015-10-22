@@ -82,7 +82,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 	}
 	else 
 	{
-		$fp = fopen('myfile.csv', 'w') or die('No file!!!'); 
+		$fp = fopen('log.csv', 'w') or die('No file!!!'); 
 		fputcsv($fp, array($_SERVER['REMOTE_ADDR'],date("Ymd h:i:sa") ,$_POST['email'],$_POST['fullname'],$_POST['street'],$_POST['postalcode'],$_POST['phone'],$_POST['email']));
 	}
 	
