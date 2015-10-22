@@ -6,11 +6,15 @@ table{border-collapse:collapse;}
 table, tr, td{
 	border:white 1px solid;
 }
-td{margin:10px;}
+td{margin:10px;
+	padding:5px;}
 td p {
 	width:300px;
 	margin:10px;
 }
+th{background-color:green;
+color:white;
+padding:5px;}
 label{margin:10px;}
 input[type="text"] {margin:10px;
 	 border-color: white;
@@ -57,14 +61,16 @@ padding:10px;}
 <h1>Form Validation with Reg Expressions and CSV</h1>
 <a href="" class = "topbuttons">Refresh This Page</a>
 <a href="./logfile.txt" class = "topbuttons">Show Logfile.txt</a>
-<a href="" class = "topbuttons">Show logfile.txt Formatted</a>
-<a href="" class = "topbuttons">Clear logfile.txt</a>
+<a href="./lab4.php?showTable=true" class = "topbuttons">Show logfile.txt Formatted</a>
+<a href="./lab4.php?clearTextFile=true" class = "topbuttons">Clear logfile.txt</a>
 </header>
 <?
-function processInput(&$invalue)
+$fileName = "logfile.txt";
+
+if (isset($_GET['clearTextFile']))
 {
-	trim($_POST['fullname']);
-	$_POST['fullname'] = preg_replace( '/\s+/', ' ', $_POST['fullname']);
+	$fp = fopen($fileName, "w");
+		fclose($fp);
 }
 if($_SERVER['REQUEST_METHOD']=='POST')
 {
@@ -84,14 +90,14 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 		$streetError="error";
 	}
 	
-	if(preg_match("/^[d-km-x][d-km-x][1-9][ -]*[d-km-x][1-9][1-9]$/i", $_POST['postalcode'])){
+	if(preg_match("/^[d-km-x][d-km-x][1-9][\s-]{0,1}[d-km-x][1-9][1-9]$/i", $_POST['postalcode'])){
 	}
 	else{
 		$errorList['postalcode'] = "Postal Code in wrong format";
 		$postalcodeError="error";
 	}
 	
-	if(preg_match("/^\(*[0-9][0-9][0-9]\)*[. -]*[0-9][0-9][0-9][. -]*[0-9][0-9][0-9][0-9]$/", $_POST['phone'])){
+	if(preg_match("/^\({0,1}[0-9][0-9][0-9]\){0,1}[. -]{0,1}[0-9][0-9][0-9][. -]{0,1}[0-9][0-9][0-9][0-9]$/", $_POST['phone'])){
 	}
 	else{
 		$errorList['phone'] = "Invalid Phone Number";
@@ -108,6 +114,8 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 	?>
 <?
 if($_SERVER['REQUEST_METHOD']=='POST'){
+	date_default_timezone_set('EST');
+	$fp = fopen($fileName, 'a+') or die('No file!!!');
 	if (isset($errorList))
 	{
 		echo  "<section class=\"errorMessage\">";
@@ -119,13 +127,11 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 	}
 	else 
 	{
-		date_default_timezone_set('EST');
 		echo "<section class=\"acceptedMessage\">";
 		echo "Thank you <strong>".$_POST['fullname']."</strong> for your submission. You submitted:<br>".$_POST['fullname'].", ".$_POST['street'].", ".$_POST['postalcode'].", ".$_POST['phone'].", ".$_POST['email'];
-		$fp = fopen('logfile.txt', 'w') or die('No file!!!'); 
 		fputcsv($fp, array($_SERVER['REMOTE_ADDR'],date("Ymd H:i:s"),$_POST['fullname'],$_POST['street'],$_POST['postalcode'],$_POST['phone'],$_POST['email']));
-		//fclose($fp);
 	}
+	fclose($fp);
 }
 ?>
 </section>
@@ -138,7 +144,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 		<td>
 			<input type="text" name= "fullname" value="<?if (isset($_POST['fullname'])) echo $_POST['fullname'];?>" size = 40> 
 		</td>
-		<td class="<?echo $nameError;?>">
+		<td class="<?if (isset($nameError))echo $nameError;?>">
 			<p>Salutation of Mr. or Mrs. followed by two text strings separated by any number of spaces.</p>
 		</td>
 	</tr>
@@ -149,7 +155,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 		<td>
 		<input type="text" name= "street"  value="<?if (isset($_POST['street'])) echo $_POST['street'];?>" size = 40> 
 		</td>
-		<td class="<?echo $streetError;?>">
+		<td class="<?if (isset($streetError))echo $streetError;?>">
 			<p>2 or 3 digit number followed by a text string ending with Street or Road separated by any number of spaces.</p>			
 		</td>
 	</tr>
@@ -160,7 +166,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 		<td>
 			<input type="text" name= "postalcode" value="<?if (isset($_POST['postalcode'])) echo $_POST['postalcode'];?>" size = 40> 
 		</td>
-		<td class="<?echo $postalcodeError;?>">
+		<td class="<?if (isset($postalcodeError))echo $postalcodeError;?>">
 		<p>Char Char Digit optional Hypen or space Char Digit Digit (abclyz and number 0 not allowed. Case insensitive.)</p>
 		</td>
 	</tr>
@@ -171,7 +177,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 		<td>
 			<input type="text" name= "phone"  value="<?if (isset($_POST['phone'])) echo $_POST['phone'];?>" size = 40> 
 		</td>
-		<td class="<?echo $phoneError;?>">
+		<td class="<?if (isset($phoneError))echo $phoneError;?>">
 			<p>10 Digits, first 3 digits have optional parentheses, either side of digits 456 are optional space, dot or hyphen.</p>
 		</td>
 	</tr>
@@ -182,7 +188,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 		<td>
 			<input type="text" name= "email" value="<?if (isset($_POST['email'])) echo $_POST['email'];?>" size = 40> 
 		</td>
-		<td class="<?echo $emailError;?>">
+		<td class="<?if (isset($emailError))echo $emailError;?>">
 			<p>firstname.lastname@mohawkcollege.domain (firstname and lastname must be 4-10 characters in length, domain may be either .com, .ca or .org)</p>
 		</td>
 	</tr>
@@ -191,6 +197,30 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 	<input type="submit" value = "Submit me now!!!">
 
 </form>
+<?
+if (isset($_GET['showTable']))
+{
+	$tempArray = array();
+	$fp = fopen($fileName, 'r');
+	echo "<table>";
+	echo "<tr><th>IP Address</th><th>Time Stamp</th><th>Name</th><th>Street</th><th>Postal Code</th><th>Phone</th><th>Email</th></tr>";
+	while (($oneRecord = fgetcsv($fp)) !== FALSE){ 
+		$tempArray[]=$oneRecord;
+	}
+	$reversedArray = array_reverse($tempArray);
+	foreach ($reversedArray as $array)
+	{
+	echo "<tr>";
+        foreach ($array as $val)
+		{
+			echo "<td>".$val."</td>";
+		}
+	echo "</tr>";
+	}
+	echo "</tabe>";
+	fclose($fp);
+}
+?>
 <?
 echo "<pre>";print_r($_POST);echo "</pre>";
 echo "<pre>";print_r($errorList);echo "</pre>";
