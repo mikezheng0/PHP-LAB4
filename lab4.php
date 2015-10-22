@@ -25,7 +25,7 @@ td:not(.row1){
 	background-color:#B8B8B8;
 }
 .error{color:red;}
-</style>
+</style> 
 </head>
 <body>
 <?
@@ -36,7 +36,6 @@ function processInput(&$invalue)
 }
 if($_SERVER['REQUEST_METHOD']=='POST')
 {
-	
 	
 	if (preg_match("/(Mrs|Mr).\s+\w+\s+\w+/", $_POST['fullname'])) {
 	} 
@@ -83,11 +82,11 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 	}
 	else 
 	{
-		$fp = fopen('myfile.txt', 'r') or die('No file!!!'); 
-		fputcsv($fp, array('car','apple','plum'))
+		$fp = fopen('myfile.csv', 'w') or die('No file!!!'); 
+		fputcsv($fp, array($_SERVER['REMOTE_ADDR'],date("Ymd h:i:sa") ,$_POST['email'],$_POST['fullname'],$_POST['street'],$_POST['postalcode'],$_POST['phone'],$_POST['email']));
 	}
+	
 }
-
 
 ?>
 <form action="<?$_SERVER['PHP_SELF']?>" method = "POST">
