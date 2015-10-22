@@ -24,10 +24,42 @@ input[type="text"] {margin:10px;
 td:not(.row1){
 	background-color:#B8B8B8;
 }
+form {margin-top:10px;}
 .error{color:red;}
+h1{color:green;}
+.topbuttons{
+	color:white;
+	background-color:green;
+	text-decoration:none;
+	padding:5px;
+}
+.topbuttons:hover{
+	color:grey;
+	background-color:darkgreen;
+}
+section{margin-top:10px;
+width:500px;
+padding:10px;}
+.errorMessage{
+	border: 1px solid grey;
+}
+.errorMessage h3{
+	color:red;
+}
+.acceptedMessage{
+	border: 1px solid green;
+	color:green;
+}
 </style> 
 </head>
 <body>
+<header>
+<h1>Form Validation with Reg Expressions and CSV</h1>
+<a href="" class = "topbuttons">Refresh This Page</a>
+<a href="" class = "topbuttons">Show Logfile.txt</a>
+<a href="" class = "topbuttons">Show logfile.txt Formatted</a>
+<a href="" class = "topbuttons">Clear logfile.txt</a>
+</header>
 <?
 function processInput(&$invalue)
 {
@@ -40,7 +72,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 	if (preg_match("/(Mrs|Mr).\s+\w+\s+\w+/", $_POST['fullname'])) {
 	} 
 	else {
-		$errorList['fullname'] = "Fullname not entered correctly3";
+		$errorList['fullname'] = "Fullname not entered correctly";
 		$nameError="error";
 	}
 	
@@ -72,9 +104,14 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 		$errorList['email'] = "Email is in wrong format!";
 		$emailError="error";
 	}
-	
+}
+	?>
+<?
+if($_SERVER['REQUEST_METHOD']=='POST'){
 	if (isset($errorList))
 	{
+		echo  "<section class=\"errorMessage\">";
+		echo "<h3>There are errors in the code:</h2>";
 		echo "<ul>";
 		foreach ($errorList as $val)
 			echo "<li>$val</li>";
@@ -82,13 +119,16 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 	}
 	else 
 	{
-		$fp = fopen('log.csv', 'w') or die('No file!!!'); 
-		fputcsv($fp, array($_SERVER['REMOTE_ADDR'],date("Ymd h:i:sa") ,$_POST['email'],$_POST['fullname'],$_POST['street'],$_POST['postalcode'],$_POST['phone'],$_POST['email']));
+		date_default_timezone_set('UTC');
+		echo "<section class=\"acceptedMessage\">";
+		echo "Thank you <strong>".$_POST['fullname']."</strong> for your submission. You submitted:<br>".$_POST['fullname'].", ".$_POST['street'].", ".$_POST['postalcode'].", ".$_POST['phone'].", ".$_POST['email'];
+		$fp = fopen('logfile.txt', 'w') or die('No file!!!'); 
+		fputcsv($fp, array($_SERVER['REMOTE_ADDR'],date("Ymd h:i:sa"),$_POST['fullname'],$_POST['street'],$_POST['postalcode'],$_POST['phone'],$_POST['email']));
+		fclose($fp);
 	}
-	
 }
-
 ?>
+</section>
 <form action="<?$_SERVER['PHP_SELF']?>" method = "POST">
 	<table>
 	<tr>
