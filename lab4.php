@@ -5,45 +5,35 @@
 No other person's work has been used without due acknowledgement. I have not 
 made my work available to anyone else.-->
 <style>
-table{border-collapse:collapse;}
-table, tr, td{
-	border:white 1px solid;
-}
-td{margin:10px;
+table {border-collapse:collapse;}
+table, tr, td {border:white 1px solid;}
+td	{margin:10px;
 	padding:5px;}
-td p {
-	width:300px;
-	margin:10px;
-}
-th{background-color:green;
-color:white;
-padding:5px;}
+td p {width:300px;
+	 margin:10px;}
+th	{background-color:green;
+	color:white;
+	padding:5px;}
 label{margin:10px;}
-input[type="text"] {margin:10px;
-	 border-color: white;
-	 background-color:#E8E8E8 ;
-	 line-height:50px;
-	 padding-left:15px;
-	padding-right:15px;
-	border:white 5px solid;}
+input[type="text"]	{margin:10px;
+					border-color: white;
+					background-color:#E8E8E8 ;
+					line-height:50px;
+					padding-left:15px;
+					padding-right:15px;
+					border:white 5px solid;}
 .row1 {background-color:darkgreen;	
-	color:white;}
-td:not(.row1){
-	background-color:#B8B8B8;
-}
+	  color:white;}
+td:not(.row1){background-color:#B8B8B8;}
 form {margin-top:10px;}
 .error{color:red;}
 h1{color:green;}
-.topbuttons{
-	color:white;
-	background-color:green;
-	text-decoration:none;
-	padding:5px;
-}
-.topbuttons:hover{
-	color:grey;
-	background-color:darkgreen;
-}
+.topbuttons	{color:white;
+			background-color:green;
+			text-decoration:none;
+			padding:5px;}
+.topbuttons:hover	{color:grey;
+					background-color:darkgreen;}
 section{margin-top:10px;
 width:500px;
 padding:10px;}
@@ -64,12 +54,13 @@ padding:10px;}
 <h1>Form Validation with Reg Expressions and CSV</h1>
 <a href="./lab4.php" class = "topbuttons">Refresh This Page</a>
 <a href="./logfile.txt" class = "topbuttons">Show Logfile.txt</a>
-<a href="./lab4.php?showTable=true" class = "topbuttons">Show logfile.txt Formatted</a>
+<a href="./lab4.php?showTable=true" class = "topbuttons">Show logfile.txt Formatted</a> <!--uses get method to show the table-->
 <a href="./lab4.php?clearTextFile=true" class = "topbuttons">Clear logfile.txt</a>
 </header>
 <?
 $fileName = "logfile.txt";
 
+//for clearing the log when the clearTextFile get is used
 if (isset($_GET['clearTextFile']))
 {
 	$fp = fopen($fileName, "w");
@@ -77,39 +68,32 @@ if (isset($_GET['clearTextFile']))
 }
 if($_SERVER['REQUEST_METHOD']=='POST')
 {
-	
-	if (preg_match("/^mr(s|)\.\s+\w+\s+\w+$/i", $_POST['fullname'])) {
-	} 
-	else {
+	//validation for input name
+	if (!preg_match("/^mr(s|)\.\s+\w+\s+\w+$/i", $_POST['fullname'])) {
 		$errorList['fullname'] = "Fullname not entered correctly";
 		$nameError="error";
 	}
 	
-	
-	if(preg_match("/^[0-9]{2,3}\s+\w+\s+(street|road)$/i", $_POST['street'])){
-	}
-	else{
+	//validation for street address
+	if(!preg_match("/^[0-9]{2,3}\s+\w+\s+(street|road)$/i", $_POST['street'])){
 		$errorList['street'] = "Street address not entered correctly";
 		$streetError="error";
 	}
 	
-	if(preg_match("/^[d-km-x][d-km-x][1-9][\s-]{0,1}[d-km-x][1-9][1-9]$/i", $_POST['postalcode'])){
-	}
-	else{
+	//validation for postal code
+	if(!preg_match("/^[d-km-x][d-km-x][1-9][\s-]{0,1}[d-km-x][1-9][1-9]$/i", $_POST['postalcode'])){
 		$errorList['postalcode'] = "Postal Code in wrong format";
 		$postalcodeError="error";
 	}
 	
-	if(preg_match("/^\({0,1}[0-9][0-9][0-9]\){0,1}[. -]{0,1}[0-9][0-9][0-9][. -]{0,1}[0-9][0-9][0-9][0-9]$/", $_POST['phone'])){
-	}
-	else{
+	// validation for phone number
+	if(!preg_match("/^\({0,1}[0-9][0-9][0-9]\){0,1}[. -]{0,1}[0-9][0-9][0-9][. -]{0,1}[0-9][0-9][0-9][0-9]$/", $_POST['phone'])){
 		$errorList['phone'] = "Invalid Phone Number";
 		$phoneError="error";
 	}
 	
-	if(preg_match("/^\w{4,10}\.\w{4,10}\@mohawkcollege.(com|ca|org)$/i", $_POST['email'])){
-	}
-	else{
+	//validation for email
+	if(!preg_match("/^\w{4,10}\.\w{4,10}\@mohawkcollege.(com|ca|org)$/i", $_POST['email'])){
 		$errorList['email'] = "Email is in wrong format!";
 		$emailError="error";
 	}
@@ -119,6 +103,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 if($_SERVER['REQUEST_METHOD']=='POST'){
 	date_default_timezone_set('EST');
 	$fp = fopen($fileName, 'a+') or die('No file!!!');
+	//if any validations have failed, the message will output as a unordered list or else it will store the values into logfile.txt
 	if (isset($errorList))
 	{
 		echo  "<section class=\"errorMessage\">";
@@ -201,26 +186,30 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
 </form>
 <?
+//will show the table if the show table link is clicked
 if (isset($_GET['showTable']))
 {
 	$tempArray = array();
 	$fp = fopen($fileName, 'r');
 	echo "<table>";
 	echo "<tr><th>IP Address</th><th>Time Stamp</th><th>Name</th><th>Street</th><th>Postal Code</th><th>Phone</th><th>Email</th></tr>";
+	//fill array with csv Data
 	while (($oneRecord = fgetcsv($fp)) !== FALSE){ 
 		$tempArray[]=$oneRecord;
 	}
+	//reverses the array which is storin the csv data
 	$reversedArray = array_reverse($tempArray);
+	//outputs the formatted table
 	foreach ($reversedArray as $array)
 	{
-	echo "<tr>";
+		echo "<tr>";
         foreach ($array as $val)
 		{
 			echo "<td>".$val."</td>";
 		}
-	echo "</tr>";
+		echo "</tr>";
 	}
-	echo "</tabe>";
+	echo "</table>";
 	fclose($fp);
 }
 ?>
