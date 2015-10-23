@@ -59,7 +59,6 @@ padding:10px;}
 </header>
 <?
 $fileName = "logfile.txt";
-
 //for clearing the log when the clearTextFile get is used
 if (isset($_GET['clearTextFile']))
 {
@@ -98,7 +97,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 		$emailError="error";
 	}
 }
-	?>
+?>
 <?
 if($_SERVER['REQUEST_METHOD']=='POST'){
 	date_default_timezone_set('EST');
@@ -120,9 +119,10 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 		fputcsv($fp, array($_SERVER['REMOTE_ADDR'],date("Ymd H:i:s"),$_POST['fullname'],$_POST['street'],$_POST['postalcode'],$_POST['phone'],$_POST['email']));
 	}
 	fclose($fp);
+	echo "</section>";
 }
 ?>
-</section>
+
 <form action="<?$_SERVER['PHP_SELF']?>" method = "POST">
 	<table>
 	<tr>
@@ -212,9 +212,6 @@ if (isset($_GET['showTable']))
 	echo "</table>";
 	fclose($fp);
 }
-?>
-<?
-echo "<pre>";print_r($_POST);echo "</pre>";
 ?>
 </body>
 </html>
