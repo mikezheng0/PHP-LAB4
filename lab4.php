@@ -59,7 +59,7 @@ padding:10px;}
 <body>
 <header>
 <h1>Form Validation with Reg Expressions and CSV</h1>
-<a href="<?$_SERVER['PHP_SELF']?>" class = "topbuttons">Refresh This Page</a>
+<a href="./lab4.php" class = "topbuttons">Refresh This Page</a>
 <a href="./logfile.txt" class = "topbuttons">Show Logfile.txt</a>
 <a href="./lab4.php?showTable=true" class = "topbuttons">Show logfile.txt Formatted</a>
 <a href="./lab4.php?clearTextFile=true" class = "topbuttons">Clear logfile.txt</a>
@@ -223,7 +223,6 @@ if (isset($_GET['showTable']))
 ?>
 <?
 echo "<pre>";print_r($_POST);echo "</pre>";
-echo "<pre>";print_r($errorList);echo "</pre>";
 ?>
 </body>
 </html>
