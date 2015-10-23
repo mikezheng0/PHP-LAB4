@@ -75,7 +75,7 @@ if (isset($_GET['clearTextFile']))
 if($_SERVER['REQUEST_METHOD']=='POST')
 {
 	
-	if (preg_match("/^(Mrs|Mr)\.\s+\w+\s+\w+$/i", $_POST['fullname'])) {
+	if (preg_match("/^mr(s|)\.\s+\w+\s+\w+$/i", $_POST['fullname'])) {
 	} 
 	else {
 		$errorList['fullname'] = "Fullname not entered correctly";
@@ -83,7 +83,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 	}
 	
 	
-	if(preg_match("/^[0-9]{2,3}\s+\w+\s+(Street|Road)$/", $_POST['street'])){
+	if(preg_match("/^[0-9]{2,3}\s+\w+\s+(street|road)$/i", $_POST['street'])){
 	}
 	else{
 		$errorList['street'] = "Street address not entered correctly";
